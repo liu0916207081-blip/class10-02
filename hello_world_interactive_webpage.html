@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello World - Modern Interactive Page</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Animated background gradient */
+        .animated-bg {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        .dark-animated-bg {
+            background: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Confetti Canvas styling */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body id="body" class="animated-bg min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-lg relative z-10">
+        <div class="glass-card rounded-3xl p-8 md:p-10 text-center transition-all duration-500 transform hover:scale-[1.01]">
+            
+            <!-- Top Controls bar -->
+            <div class="flex justify-between items-center mb-8">
+                <div class="inline-flex items-center space-x-2 bg-white/30 dark:bg-slate-800/40 px-3 py-1.5 rounded-full text-xs font-semibold tracking-wider text-slate-800 dark:text-slate-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>ONLINE</span>
+                </div>
+                <!-- Theme Switcher Button -->
+                <button id="theme-btn" class="w-10 h-10 rounded-full bg-white/30 dark:bg-slate-800/50 hover:bg-white/50 dark:hover:bg-slate-700/60 flex items-center justify-center text-slate-800 dark:text-amber-300 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-white/50">
+                    <i class="fa-solid fa-moon text-lg" id="theme-icon"></i>
+                </button>
+            </div>
+
+            <!-- Greeting Text Display Area -->
+            <div class="my-8">
+                <div class="inline-block p-4 rounded-2xl bg-white/20 dark:bg-white/5 mb-4 shadow-inner">
+                    <i class="fa-solid fa-globe text-4xl text-white dark:text-cyan-400 animate-bounce"></i>
+                </div>
+                <h1 id="greeting-title" class="text-4xl md:text-5xl font-extrabold text-white dark:text-slate-100 tracking-tight transition-all duration-300">
+                    Hello, World!
+                </h1>
+                <p id="language-name" class="mt-2 text-sm font-medium text-white/80 dark:text-slate-300">
+                    English
+                </p>
+            </div>
+
+            <p class="text-white/90 dark:text-slate-300 text-sm md:text-base leading-relaxed mb-8">
+                歡迎來到這個現代化的 Hello World 互動網頁。點擊下方按鈕體驗切換語言與慶祝特效！
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <button id="next-lang-btn" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-white text-slate-800 dark:bg-cyan-500 dark:text-slate-900 font-semibold shadow-lg hover:bg-opacity-90 dark:hover:bg-cyan-400 transform active:scale-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-language"></i>
+                    <span>切換語言</span>
+                </button>
+                <button id="celebrate-btn" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-slate-900/40 dark:bg-slate-800/80 text-white font-semibold shadow-lg hover:bg-slate-900/60 dark:hover:bg-slate-700/80 border border-white/20 transform active:scale-95 transition-all flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                    <span>慶祝一下</span>
+                </button>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-white/20 dark:border-slate-700/50 flex justify-around text-xs text-white/70 dark:text-slate-400">
+                <div>
+                    <span class="block text-base font-bold text-white dark:text-slate-200" id="click-count">0</span>
+                    <span>互動次數</span>
+                </div>
+                <div>
+                    <span class="block text-base font-bold text-white dark:text-slate-200" id="current-time">00:00:00</span>
+                    <span>當地時間</span>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Data for multi-language greetings
+        const greetings = [
+            { text: "Hello, World!", lang: "English" },
+            { text: "你好，世界！", lang: "繁體中文" },
+            { text: "Bonjour le monde!", lang: "Français" },
+            { text: "¡Hola, Mundo!", lang: "Español" },
+            { text: "Hallo, Welt!", lang: "Deutsch" },
+            { text: "こんにちは、世界！", lang: "日本語" },
+            { text: "안녕하세요, 世界!", lang: "한국어" },
+            { text: "Ciao, mondo!", lang: "Italiano" },
+            { text: "Olá, mundo!", lang: "Português" },
+            { text: "Привет, мир!", lang: "Русский" }
+        ];
+
+        let currentIndex = 0;
+        let totalInteractions = 0;
+        let isDarkMode = false;
+
+        // DOM Elements
+        const body = document.getElementById('body');
+        const greetingTitle = document.getElementById('greeting-title');
+        const languageName = document.getElementById('language-name');
+        const nextLangBtn = document.getElementById('next-lang-btn');
+        const celebrateBtn = document.getElementById('celebrate-btn');
+        const themeBtn = document.getElementById('theme-btn');
+        const themeIcon = document.getElementById('theme-icon');
+        const clickCountEl = document.getElementById('click-count');
+        const currentTimeEl = document.getElementById('current-time');
+
+        // Update greeting text with smooth fade transition
+        function updateGreeting() {
+            greetingTitle.classList.add('opacity-0', 'scale-95');
+            
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % greetings.length;
+                greetingTitle.textContent = greetings[currentIndex].text;
+                languageName.textContent = greetings[currentIndex].lang;
+                greetingTitle.classList.remove('opacity-0', 'scale-95');
+            }, 150);
+
+            incrementCounter();
+        }
+
+        // Increment interaction counter
+        function incrementCounter() {
+            totalInteractions++;
+            clickCountEl.textContent = totalInteractions;
+        }
+
+        // Toggle Dark/Light theme
+        themeBtn.addEventListener('click', () => {
+            isDarkMode = !isDarkMode;
+            if (isDarkMode) {
+                document.documentElement.classList.add('dark');
+                body.classList.remove('animated-bg');
+                body.classList.add('dark-animated-bg');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                document.documentElement.classList.remove('dark');
+                body.classList.remove('dark-animated-bg');
+                body.classList.add('animated-bg');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+            incrementCounter();
+        });
+
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            currentTimeEl.textContent = now.toLocaleTimeString('zh-TW', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Event Listeners
+        nextLangBtn.addEventListener('click', updateGreeting);
+        celebrateBtn.addEventListener('click', () => {
+            triggerConfetti();
+            incrementCounter();
+        });
+
+        const canvas = document.getElementById('confetti-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 8 + 4;
+                this.speedX = (Math.random() - 0.5) * 10;
+                this.speedY = Math.random() * -12 - 4;
+                this.gravity = 0.4;
+                this.color = `hsl(${Math.random() * 360}, 90%, 65%)`;
+                this.rotation = Math.random() * 360;
+                this.rotationSpeed = (Math.random() - 0.5) * 10;
+                this.opacity = 1;
+            }
+
+            update() {
+                this.speedY += this.gravity;
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.rotation += this.rotationSpeed;
+                this.opacity -= 0.015;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate((this.rotation * Math.PI) / 180);
+                ctx.globalAlpha = Math.max(this.opacity, 0);
+                ctx.fillStyle = this.color;
+                ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+                ctx.restore();
+            }
+        }
+
+        function triggerConfetti() {
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            for (let i = 0; i < 80; i++) {
+                particles.push(new Particle(centerX, centerY));
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].opacity <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+    </script>
+</body>
+</html>
