@@ -36,7 +36,11 @@
   </main>
 </div>
 <div class="modal-backdrop" id="modalBackdrop"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><h2 id="modalTitle">新增項目</h2><button class="close" id="closeModal" aria-label="關閉">×</button></div><form id="itemForm"><div class="form-grid"><div class="field full"><label for="title">項目名稱 *</label><input id="title" required maxlength="60" placeholder="例如：日文單字複習" /></div><div class="field"><label for="category">分類</label><select id="category"><option value="study">學習</option><option value="leisure">日常休閒</option><option value="life">生活</option><option value="task">待辦</option></select></div><div class="field"><label for="date">日期 *</label><input id="date" type="date" required /></div><div class="field"><label for="start">開始時間</label><input id="start" type="time" value="09:00" /></div><div class="field"><label for="end">結束時間</label><input id="end" type="time" value="10:00" /></div><div class="field"><label for="reminder">提醒時間</label><input id="reminder" type="datetime-local" /></div><div class="field"><label for="repeat">重複</label><select id="repeat"><option value="none">不重複</option><option value="daily">每天</option><option value="weekly">每週</option><option value="monthly">每月</option></select></div><div class="field full" id="skipHolidayWrap"><label style="display:flex;align-items:center;gap:8px;color:#666b7d;font-weight:500"><input id="skipHolidays" type="checkbox" checked style="accent-color:#7066e8"> 國定假日／補假自動跳過（只適用重複項目）</label><small style="color:#a0a3b0;font-size:11px">假日當天不顯示此行程；不會刪除行程或影響其他日期。</small></div><div class="field full" id="subjectWrap" style="display:none"><label for="subject">科目資料夾</label><select id="subject"></select></div><div class="field full"><label for="note">備註（選填）</label><textarea id="note" maxlength="180" placeholder="補充細節或提醒自己…"></textarea></div></div><div class="form-actions"><button type="button" class="secondary" id="cancelModal">取消</button><button type="submit" class="primary">儲存項目</button></div></form></section></div><div class="toast" id="toast"></div>
-<script>
+<script type="module">
+import { firebaseApp } from "./firebase-init.js";
+
+window.firebaseApp = firebaseApp;
+
 (()=>{
   const DAY=['日','一','二','三','四','五','六'], STORE='dayflow.items.v1';
   const today=new Date();today.setHours(0,0,0,0);
