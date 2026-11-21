@@ -1,4 +1,11 @@
 {
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json",
+    "edition": "enterprise",
+    "database": "dayflow",
+    "location": "asia-east1"
+  },
   "hosting": {
     "public": ".",
     "ignore": [
