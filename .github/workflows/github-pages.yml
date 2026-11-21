@@ -32,7 +32,7 @@ jobs:
       - name: Prepare static site
         run: |
           mkdir -p _site
-          cp index.html firebase-init.js _site/
+          cp index.html firebase-init.js ai-assistant.js _site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
