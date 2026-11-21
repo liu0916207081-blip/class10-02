@@ -8,5 +8,18 @@
       "**/*.zip"
     ],
     "cleanUrls": true
+  },
+  "auth": {
+    "providers": {
+      "googleSignIn": {
+        "oAuthBrandDisplayName": "日序",
+        "supportEmail": "liu0916207081@gmail.com",
+        "authorizedRedirectUris": [
+          "https://liu0916207081-blip.github.io",
+          "https://project-8184807316787267292.firebaseapp.com/__/auth/handler",
+          "http://localhost"
+        ]
+      }
+    }
   }
 }
