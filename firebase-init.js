@@ -46,6 +46,9 @@ const assistantModel = getGenerativeModel(firebaseAI, {
     temperature: 0.55,
     maxOutputTokens: 700,
   },
+  requestOptions: {
+    timeout: 30000,
+  },
 });
 
 export function startAssistantChat() {
