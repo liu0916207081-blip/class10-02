@@ -37,6 +37,10 @@ function appendMessage(text, kind = "assistant") {
 
 function readScheduleItems() {
   try {
+    if (typeof window.getScheduleItems === "function") {
+      const liveItems = window.getScheduleItems();
+      if (Array.isArray(liveItems)) return liveItems;
+    }
     const items = JSON.parse(localStorage.getItem("dayflow.items.v1") || "[]");
     return Array.isArray(items) ? items : [];
   } catch {
@@ -75,13 +79,20 @@ function getScheduleSummary() {
 
 function getFriendlyError(error) {
   const details = `${error?.code || ""} ${error?.message || ""}`.toLowerCase();
+  const diagnosticCode = String(error?.code || "unknown").replace(/[^a-z0-9/_-]/gi, "").slice(0, 80);
+  const diagnosticMessage = String(error?.message || "")
+    .replace(/https?:\/\/\S+/gi, "[網址]")
+    .replace(/AIza[\w-]+/g, "[API key]")
+    .replace(/[\r\n]+/g, " ")
+    .slice(0, 180);
+  const diagnostic = `\n診斷資訊：${diagnosticCode}${diagnosticMessage ? `｜${diagnosticMessage}` : ""}`;
   if (details.includes("app check") || details.includes("appcheck") || details.includes("permission_denied")) {
-    return "AI 服務的 Firebase App Check 尚未完成設定。請稍後再試，或聯絡系統管理者。";
+    return `AI 服務驗證失敗，Firebase App Check 尚未通過。${diagnostic}`;
   }
   if (details.includes("api key") || details.includes("api_key") || details.includes("not enabled")) {
-    return "Firebase AI Logic 尚未完成啟用。請稍後再試，或聯絡系統管理者。";
+    return `Firebase AI Logic 設定或 API 金鑰有誤。${diagnostic}`;
   }
-  return "目前無法取得回覆，請稍後再試。";
+  return `目前無法取得回覆。${diagnostic}`;
 }
 
 async function sendMessage(rawText) {

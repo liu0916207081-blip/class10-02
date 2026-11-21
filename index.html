@@ -68,6 +68,7 @@ window.firebaseApp = firebaseApp;
   const mondayOf=d=>{const x=new Date(d);x.setDate(x.getDate()-(x.getDay()+6)%7);x.setHours(0,0,0,0);return x};
   const FOLDER_STORE='dayflow.subjectFolders.v1', DONE_STORE='dayflow.completed.v1';
   let weekStart=mondayOf(today), items=load(), searchTerm='', activeView='週曆', activeFolder=null;
+  window.getScheduleItems=()=>items.map(item=>({...item}));
   let folders=readStore(FOLDER_STORE,[{id:'subject-english',name:'英文',color:'#6d91d4'},{id:'subject-japanese',name:'日文',color:'#d27c8c'},{id:'subject-research',name:'使用者研究',color:'#8c79d8'}]);
   let completed=readStore(DONE_STORE,{});
   function readStore(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}}
