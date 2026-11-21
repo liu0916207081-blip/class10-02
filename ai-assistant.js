@@ -40,13 +40,17 @@ function getScheduleSummary() {
     if (!Array.isArray(items) || items.length === 0) return "目前沒有儲存的行程。";
 
     const categories = { study: "學習", leisure: "休閒", life: "生活", task: "待辦" };
-    return items.slice(0, 40).map((item) => {
+    const orderedItems = [...items].sort((a, b) => `${a.date || ""} ${a.time || ""}`.localeCompare(`${b.date || ""} ${b.time || ""}`));
+    const summary = orderedItems.slice(0, 100).map((item) => {
       const title = String(item.title || "未命名").slice(0, 80);
       const date = String(item.date || "日期未定");
-      const time = String(item.time || "整天");
+      const time = item.time ? `${item.time}${item.end ? `–${item.end}` : ""}` : "整天";
       const category = categories[item.category] || "其他";
-      return `- ${date} ${time}｜${category}｜${title}`;
+      const repeat = item.repeat && item.repeat !== "none" ? `（${item.repeat === "daily" ? "每天" : item.repeat === "weekly" ? "每週" : "每月"}）` : "";
+      return `- ${date} ${time}｜${category}｜${title}${repeat}`;
     }).join("\n");
+    const omittedCount = orderedItems.length - Math.min(orderedItems.length, 100);
+    return `共 ${items.length} 筆已儲存行程，以下依日期與時間排序：\n${summary}${omittedCount > 0 ? `\n（另有 ${omittedCount} 筆較後面的行程未附上）` : ""}`;
   } catch {
     return "讀取行程摘要時發生問題。";
   }
@@ -81,7 +85,7 @@ async function sendMessage(rawText) {
 
   try {
     const prompt = useSchedule.checked
-      ? `${text}\n\n[使用者已選擇提供目前行程摘要]\n${getScheduleSummary()}`
+      ? `${text}\n\n[目前使用者的已儲存行程，請依此資料回答與安排；若資料中沒有答案，請明確詢問，不要猜測]\n${getScheduleSummary()}`
       : text;
     const result = await chat.sendMessage(prompt);
     pendingMessage.textContent = result.response.text() || "我暫時沒有可顯示的回覆，請換個方式再問一次。";

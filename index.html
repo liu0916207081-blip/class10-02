@@ -43,7 +43,7 @@
 <section class="ai-panel" id="aiPanel" role="dialog" aria-labelledby="aiTitle" hidden>
   <header class="ai-head"><div><div class="ai-title" id="aiTitle">日序 AI 助手</div><div class="ai-subtitle">幫你安排時間、拆解任務與規劃學習</div></div><button class="ai-close" id="aiClose" type="button" aria-label="關閉 AI 助手">×</button></header>
   <p class="ai-privacy">回覆由 Google Gemini 生成。送出的訊息會交給 Google 處理；請勿輸入密碼或敏感資訊。</p>
-  <label class="ai-context"><input id="aiUseSchedule" type="checkbox" /> 參考我的行程（行程摘要會一併傳送）</label>
+  <label class="ai-context"><input id="aiUseSchedule" type="checkbox" checked /> 參考我的行程（可隨時取消勾選）</label>
   <div class="ai-messages" id="aiMessages" role="log" aria-live="polite"><div class="ai-message assistant">你好！我可以幫你規劃今天、拆解任務，或安排學習時段。你想先處理什麼？</div></div>
   <div class="ai-suggestions"><button class="ai-suggestion" type="button" data-ai-prompt="幫我把一項大任務拆成容易開始的小步驟。">拆解任務</button><button class="ai-suggestion" type="button" data-ai-prompt="幫我規劃一個平衡學習與休息的今天。">規劃今天</button></div>
   <form class="ai-form" id="aiForm"><textarea class="ai-input" id="aiInput" maxlength="500" rows="1" placeholder="輸入你想問的事…" aria-label="輸入訊息"></textarea><button class="ai-send" id="aiSend" type="submit">送出</button></form>
